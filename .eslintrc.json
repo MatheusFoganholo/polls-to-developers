@@ -5,6 +5,7 @@
   "rules": {
     "semi": "off",
     "space-before-function-paren": "off",
+    "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/member-delimiter-style": "off",
