@@ -1,3 +1,5 @@
+import { AccountModel } from '@/domain/models/account-model';
+import { AuthenticationParams } from '@/domain/usecases/authentication';
 import { internet } from 'faker';
 import { HttpPostClientSpy } from '@/data/test/mock-http-client';
 import { HttpStatusCode } from '@/data/protocols/http/http-response';
@@ -8,12 +10,15 @@ import { UnexpectedError } from '@/domain/errors/unexpected-error';
 
 type SutTypes = {
   sut: RemoteAuthentication;
-  httpPostClientSpy: HttpPostClientSpy;
+  httpPostClientSpy: HttpPostClientSpy<AuthenticationParams, AccountModel>;
 };
 
 // SUT: System Under Test
 const makeSut = (url = internet.url()): SutTypes => {
-  const httpPostClientSpy = new HttpPostClientSpy();
+  const httpPostClientSpy = new HttpPostClientSpy<
+    AuthenticationParams,
+    AccountModel
+  >();
   const sut = new RemoteAuthentication(url, httpPostClientSpy);
 
   return {
