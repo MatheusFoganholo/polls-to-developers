@@ -1,9 +1,16 @@
 {
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "parserOptions": {
     "project": "./tsconfig.json"
   },
   "rules": {
     "semi": "off",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
     "space-before-function-paren": "off",
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/ban-types": "off",
@@ -17,6 +24,8 @@
     "standard-with-typescript",
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
-  ]
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended"
+  ],
+  "plugins": ["react"]
 }
