@@ -9,8 +9,10 @@
   },
   "rules": {
     "semi": "off",
+    "react/no-unescaped-entities": "off",
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
+    "@typescript-eslint/semi": "off",
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/no-unused-vars": "off",
