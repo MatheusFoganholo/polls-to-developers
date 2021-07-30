@@ -12,6 +12,8 @@
     "react/no-unescaped-entities": "off",
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
+    "@typescript-eslint/space-before-function-paren": "off",
+    "@typescript-eslint/method-signature-style": "off",
     "@typescript-eslint/semi": "off",
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/ban-types": "off",
