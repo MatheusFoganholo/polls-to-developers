@@ -1,4 +1,5 @@
 import React from 'react';
+import { internet } from 'faker';
 import {
   render,
   RenderResult,
@@ -44,11 +45,12 @@ describe('Login Component', () => {
       sut: { getByTestId },
       validationSpy
     } = makeSut();
+    const email = internet.email();
     const emailInput = getByTestId('email-input');
-    fireEvent.input(emailInput, { target: { value: 'any_email' } });
+    fireEvent.input(emailInput, { target: { value: email } });
 
     expect(validationSpy.fieldName).toBe('email');
-    expect(validationSpy.fieldValue).toBe('any_email');
+    expect(validationSpy.fieldValue).toBe(email);
   });
 
   test('Should call Validation with correct password', () => {
@@ -56,10 +58,11 @@ describe('Login Component', () => {
       sut: { getByTestId },
       validationSpy
     } = makeSut();
+    const password = internet.password();
     const passwordInput = getByTestId('password-input');
-    fireEvent.input(passwordInput, { target: { value: 'any_password' } });
+    fireEvent.input(passwordInput, { target: { value: password } });
 
     expect(validationSpy.fieldName).toBe('password');
-    expect(validationSpy.fieldValue).toBe('any_password');
+    expect(validationSpy.fieldValue).toBe(password);
   });
 });
