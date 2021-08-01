@@ -8,8 +8,8 @@ type Props = React.DetailedHTMLProps<
 >;
 
 export const Input: React.FC<Props> = (props: Props) => {
-  const { errorState } = useContext(FormContext);
-  const error = errorState[props.name];
+  const { state, setState } = useContext(FormContext);
+  const error = state[`${props.name}Error`];
 
   const enableInput = (event: React.FocusEvent<HTMLInputElement>): void => {
     event.target.readOnly = false;
@@ -23,9 +23,24 @@ export const Input: React.FC<Props> = (props: Props) => {
     return error;
   };
 
+  const handleChange = ({
+    target: { name, value }
+  }: React.FocusEvent<HTMLInputElement>): void => {
+    setState({
+      ...state,
+      [name]: value
+    });
+  };
+
   return (
     <div className={Styles.inputWrapper}>
-      <input {...props} readOnly onFocus={enableInput} />
+      <input
+        {...props}
+        readOnly
+        onFocus={enableInput}
+        onChange={handleChange}
+        data-testid={`${props.name}-input`}
+      />
       <span
         title={getTitle()}
         className={Styles.status}
