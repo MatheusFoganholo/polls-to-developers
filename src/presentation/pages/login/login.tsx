@@ -31,7 +31,9 @@ export const Login: React.FC = () => {
             name="password"
             placeholder="Type your password"
           />
-          <button type="submit">Login</button>
+          <button type="submit" data-testid="submit-button" disabled>
+            Login
+          </button>
           <span className={Styles.link}>
             Don't have an account? Click <a href="#">here</a> to register.
           </span>

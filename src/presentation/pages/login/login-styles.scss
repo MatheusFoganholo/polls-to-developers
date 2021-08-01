@@ -23,6 +23,16 @@
 
     button {
       margin-top: 8px;
+
+      &:disabled {
+        cursor: not-allowed;
+        color: $buttonDisabledColor;
+        background-color: $buttonDisabledBackground;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
     }
 
     .link {
