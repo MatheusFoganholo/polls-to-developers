@@ -1,8 +1,8 @@
 import React from 'react';
 import Header from '@/presentation/components/login-header/login-header';
 import Footer from '@/presentation/components/footer/footer';
+import { FormStatus } from '@/presentation/components/form-status/form-status';
 import { Input } from '@/presentation/components/input/input';
-import { Spinner } from '@/presentation/components/spinner/spinner';
 import Styles from './login-styles.scss';
 
 export const Login: React.FC = () => {
@@ -21,10 +21,7 @@ export const Login: React.FC = () => {
         <span className={Styles.link}>
           Don't have an account? Click <a href="#">here</a> to register.
         </span>
-        <div className={Styles.errorWrapper}>
-          <Spinner className={Styles.spinner} />
-          <span className={Styles.error}>Erro</span>
-        </div>
+        <FormStatus />
       </form>
       <Footer />
     </div>
