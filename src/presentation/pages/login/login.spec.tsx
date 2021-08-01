@@ -1,5 +1,5 @@
 import React from 'react';
-import { internet } from 'faker';
+import { internet, random } from 'faker';
 import {
   render,
   RenderResult,
@@ -16,6 +16,7 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const validationSpy = new ValidationSpy();
+  validationSpy.errorMessage = random.words();
   const sut = render(<Login validation={validationSpy} />);
   return { sut, validationSpy };
 };
@@ -25,7 +26,8 @@ describe('Login Component', () => {
 
   test('Should initialize with initial state', () => {
     const {
-      sut: { getByTestId }
+      sut: { getByTestId },
+      validationSpy
     } = makeSut();
     const errorWrapper = getByTestId('error-wrapper');
     const submitButton = getByTestId('submit-button') as HTMLButtonElement;
@@ -34,7 +36,7 @@ describe('Login Component', () => {
 
     expect(errorWrapper.childElementCount).toBe(0);
     expect(submitButton.disabled).toBe(true);
-    expect(emailStatus.title).toBe('Required field');
+    expect(emailStatus.title).toBe(validationSpy.errorMessage);
     expect(emailStatus.textContent).toBe('🔴');
     expect(passwordStatus.title).toBe('Required field');
     expect(passwordStatus.textContent).toBe('🔴');
@@ -47,6 +49,7 @@ describe('Login Component', () => {
     } = makeSut();
     const email = internet.email();
     const emailInput = getByTestId('email-input');
+
     fireEvent.input(emailInput, { target: { value: email } });
 
     expect(validationSpy.fieldName).toBe('email');
@@ -60,9 +63,24 @@ describe('Login Component', () => {
     } = makeSut();
     const password = internet.password();
     const passwordInput = getByTestId('password-input');
+
     fireEvent.input(passwordInput, { target: { value: password } });
 
     expect(validationSpy.fieldName).toBe('password');
     expect(validationSpy.fieldValue).toBe(password);
+  });
+
+  test('Should show email error if Validation fails', () => {
+    const {
+      sut: { getByTestId },
+      validationSpy
+    } = makeSut();
+    const emailInput = getByTestId('email-input');
+    const emailStatus = getByTestId('email-status');
+
+    fireEvent.input(emailInput, { target: { value: internet.email() } });
+
+    expect(emailStatus.title).toBe(validationSpy.errorMessage);
+    expect(emailStatus.textContent).toBe('🔴');
   });
 });
