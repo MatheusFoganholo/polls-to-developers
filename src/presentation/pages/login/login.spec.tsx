@@ -70,6 +70,21 @@ describe('Login Component', () => {
     expect(passwordStatus.textContent).toBe('🔴');
   });
 
+  test('Should show valid email state if Validation succeeds', () => {
+    const {
+      sut: { getByTestId },
+      validationStub
+    } = makeSut();
+    const emailInput = getByTestId('email-input');
+    const emailStatus = getByTestId('email-status');
+
+    validationStub.errorMessage = null;
+    fireEvent.input(emailInput, { target: { value: internet.email() } });
+
+    expect(emailStatus.title).toBe('No errors.');
+    expect(emailStatus.textContent).toBe('✅');
+  });
+
   test('Should show valid password state if Validation succeeds', () => {
     const {
       sut: { getByTestId },
