@@ -43,7 +43,11 @@ export const Login: React.FC<Props> = ({ validation }: Props) => {
             name="password"
             placeholder="Type your password"
           />
-          <button type="submit" data-testid="submit-button" disabled>
+          <button
+            type="submit"
+            data-testid="submit-button"
+            disabled={!!state.emailError || !!state.passwordError}
+          >
             Login
           </button>
           <span className={Styles.link}>
