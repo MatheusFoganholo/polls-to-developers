@@ -34,11 +34,15 @@ export const Login: React.FC<Props> = ({
     event.preventDefault();
     try {
       if (state.isLoading || state.emailError || state.passwordError) return;
+
       setState({ ...state, isLoading: true });
-      await authentication.auth({
+
+      const account = await authentication.auth({
         email: state.email,
         password: state.password
       });
+
+      localStorage.setItem('accessToken', account.accessToken);
     } catch (error) {
       setState({ ...state, isLoading: false, requestError: error.message });
     }
