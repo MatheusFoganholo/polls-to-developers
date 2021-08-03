@@ -1,4 +1,5 @@
 import React from 'react';
+import 'jest-localstorage-mock';
 import { internet, random } from 'faker';
 import {
   cleanup,
@@ -70,6 +71,7 @@ const simulateValidSubmit = (
 
 describe('Login Component', () => {
   afterEach(cleanup);
+  beforeEach(() => localStorage.clear());
 
   test('Should initialize with initial state', () => {
     const validationError = random.words();
@@ -176,5 +178,17 @@ describe('Login Component', () => {
 
     expect(errorWrapper.childElementCount).toBe(1); // Loading shouldn't appear
     expect(requestError.textContent).toBe(error.message);
+  });
+
+  test('Should add accessToken to localStorage on Authentication success', async () => {
+    const { sut, authenticationSpy } = makeSut();
+
+    simulateValidSubmit(sut);
+    await waitFor(() => sut.getByTestId('form'));
+
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      'accessToken',
+      authenticationSpy.account.accessToken
+    );
   });
 });
