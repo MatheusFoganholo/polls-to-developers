@@ -11,7 +11,11 @@ export const FormStatus: React.FC = () => {
   return (
     <div className={Styles.errorWrapper} data-testid="error-wrapper">
       {isLoading && <Spinner className={Styles.spinner} />}
-      {requestError && <span className={Styles.error}>{requestError}</span>}
+      {requestError && (
+        <span className={Styles.error} data-testid="request-error">
+          {requestError}
+        </span>
+      )}
     </div>
   );
 };
