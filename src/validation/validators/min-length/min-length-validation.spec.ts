@@ -8,4 +8,11 @@ describe('MinLengthValidation', () => {
 
     expect(error).toEqual(new InvalidFieldError());
   });
+
+  test('Should return falsy if value is valid', () => {
+    const sut = new MinLengthValidation('field', 6);
+    const error = sut.validate('123456');
+
+    expect(error).toBeFalsy();
+  });
 });
