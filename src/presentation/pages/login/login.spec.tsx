@@ -1,4 +1,6 @@
 import React from 'react';
+import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import 'jest-localstorage-mock';
 import { internet, random } from 'faker';
 import {
@@ -21,12 +23,16 @@ type SutParams = {
   validationError: string;
 };
 
+const history = createMemoryHistory();
+
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub();
   const authenticationSpy = new AuthenticationSpy();
   validationStub.errorMessage = params?.validationError;
   const sut = render(
-    <Login validation={validationStub} authentication={authenticationSpy} />
+    <Router history={history}>
+      <Login validation={validationStub} authentication={authenticationSpy} />
+    </Router>
   );
   return { sut, authenticationSpy };
 };
@@ -190,5 +196,15 @@ describe('Login Component', () => {
       'accessToken',
       authenticationSpy.account.accessToken
     );
+  });
+
+  test('Should go to sign-up page', () => {
+    const { sut } = makeSut();
+    const registerLink = sut.getByTestId('sign-up');
+
+    fireEvent.click(registerLink);
+
+    expect(history.length).toBe(2);
+    expect(history.location.pathname).toBe('/sign-up');
   });
 });
