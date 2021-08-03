@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Context from '@/presentation/contexts/form/form-context';
 import { Authentication } from '@/domain/usecases';
 import {
@@ -80,7 +81,11 @@ export const Login: React.FC<Props> = ({
             Login
           </button>
           <span className={Styles.link}>
-            Don't have an account? Click <a href="#">here</a> to register.
+            Don't have an account? Click{' '}
+            <Link to="/sign-up" data-testid="sign-up">
+              here
+            </Link>{' '}
+            to register.
           </span>
           <FormStatus />
         </form>
