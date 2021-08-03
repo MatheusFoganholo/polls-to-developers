@@ -1,14 +1,15 @@
 import React from 'react';
 import { internet, random } from 'faker';
 import {
+  cleanup,
+  fireEvent,
   render,
   RenderResult,
-  fireEvent,
-  cleanup
+  waitFor
 } from '@testing-library/react';
-
-import { Login } from './login';
 import { AuthenticationSpy, ValidationStub } from '@/presentation/test';
+import { InvalidCredentialsError } from '@/domain/errors';
+import { Login } from './login';
 
 type SutTypes = {
   sut: RenderResult;
@@ -158,5 +159,22 @@ describe('Login Component', () => {
     fireEvent.submit(sut.getByTestId('form'));
 
     expect(authenticationSpy.callsCount).toBe(0);
+  });
+
+  test('Should present error and hide spinner if Authentication fails', async () => {
+    const { sut, authenticationSpy } = makeSut();
+    const error = new InvalidCredentialsError();
+    const errorWrapper = sut.getByTestId('error-wrapper');
+
+    jest
+      .spyOn(authenticationSpy, 'auth')
+      .mockReturnValueOnce(Promise.reject(error));
+    simulateValidSubmit(sut);
+    await waitFor(() => errorWrapper);
+
+    const requestError = sut.getByTestId('request-error');
+
+    expect(errorWrapper.childElementCount).toBe(1); // Loading shouldn't appear
+    expect(requestError.textContent).toBe(error.message);
   });
 });
