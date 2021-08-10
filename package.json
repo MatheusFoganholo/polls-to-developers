@@ -1,6 +1,6 @@
 {
   "name": "polls-to-developers",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "Matheus Foganholo",
   "scripts": {
     "start": "webpack-dev-server --open",
