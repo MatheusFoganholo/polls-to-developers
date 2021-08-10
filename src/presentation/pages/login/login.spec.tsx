@@ -60,7 +60,7 @@ const testStatusForField = (
 ): void => {
   const fieldStatus = sut.getByTestId(`${fieldName}-status`);
   expect(fieldStatus.title).toBe(validationError || 'No errors.');
-  expect(fieldStatus.textContent).toBe(validationError ? '🔴' : '✅');
+  expect(fieldStatus.textContent).toBe(validationError ? '🔴' : '🟢');
 };
 
 const testErrorWrapperChildCount = (sut: RenderResult, count: number): void => {
