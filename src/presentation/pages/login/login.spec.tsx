@@ -228,6 +228,19 @@ describe('Login Component', () => {
     );
   });
 
+  test('Should present error if SaveAccessToken fails', async () => {
+    const { sut, saveAccessTokenMock } = makeSut();
+    const error = new InvalidCredentialsError();
+
+    jest
+      .spyOn(saveAccessTokenMock, 'save')
+      .mockReturnValueOnce(Promise.reject(error));
+    await simulateValidSubmit(sut);
+
+    testErrorWrapperChildCount(sut, 1);
+    testElementText(sut, 'request-error', error.message);
+  });
+
   test('Should go to sign-up page', () => {
     const { sut } = makeSut();
     const registerLink = sut.getByTestId('sign-up');
