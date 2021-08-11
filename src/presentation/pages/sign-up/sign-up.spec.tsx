@@ -9,31 +9,42 @@ import {
 import { createMemoryHistory } from 'history';
 import { internet, name, random } from 'faker';
 import { Router } from 'react-router-dom';
-import { AddAccountSpy, Helper, ValidationStub } from '@/presentation/test';
+import {
+  AddAccountSpy,
+  Helper,
+  SaveAccessTokenMock,
+  ValidationStub
+} from '@/presentation/test';
 import { EmailInUseError } from '@/domain/errors';
 import { SignUp } from './sign-up';
 
 type SutTypes = {
   sut: RenderResult;
   addAccountSpy: AddAccountSpy;
+  saveAccessTokenMock: SaveAccessTokenMock;
 };
 
 type SutParams = {
   validationError: string;
 };
 
-const history = createMemoryHistory({ initialEntries: ['/login'] });
+const history = createMemoryHistory({ initialEntries: ['/sign-up'] });
 
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub();
   validationStub.errorMessage = params?.validationError;
   const addAccountSpy = new AddAccountSpy();
+  const saveAccessTokenMock = new SaveAccessTokenMock();
   const sut = render(
     <Router history={history}>
-      <SignUp validation={validationStub} addAccount={addAccountSpy} />
+      <SignUp
+        validation={validationStub}
+        addAccount={addAccountSpy}
+        saveAccessToken={saveAccessTokenMock}
+      />
     </Router>
   );
-  return { sut, addAccountSpy };
+  return { sut, addAccountSpy, saveAccessTokenMock };
 };
 
 const simulateValidSubmit = async (
@@ -197,5 +208,17 @@ describe('SignUp Component', () => {
 
     Helper.testChildCount(sut, 'error-wrapper', 1);
     Helper.testElementText(sut, 'request-error', error.message);
+  });
+
+  test('Should call SaveAccessToken on Authentication success', async () => {
+    const { sut, addAccountSpy, saveAccessTokenMock } = makeSut();
+
+    await simulateValidSubmit(sut);
+
+    expect(history.length).toBe(1);
+    expect(history.location.pathname).toBe('/');
+    expect(saveAccessTokenMock.accessToken).toBe(
+      addAccountSpy.account.accessToken
+    );
   });
 });
