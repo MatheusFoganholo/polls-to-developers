@@ -10,6 +10,7 @@ import { createMemoryHistory } from 'history';
 import { internet, name, random } from 'faker';
 import { Router } from 'react-router-dom';
 import { AddAccountSpy, Helper, ValidationStub } from '@/presentation/test';
+import { EmailInUseError } from '@/domain/errors';
 import { SignUp } from './sign-up';
 
 type SutTypes = {
@@ -49,6 +50,14 @@ const simulateValidSubmit = async (
 
   fireEvent.submit(form);
   await waitFor(() => form);
+};
+
+const testElementText = (
+  sut: RenderResult,
+  fieldName: string,
+  text: string
+): void => {
+  expect(sut.getByTestId(fieldName).textContent).toBe(text);
 };
 
 describe('SignUp Component', () => {
@@ -185,5 +194,16 @@ describe('SignUp Component', () => {
     await simulateValidSubmit(sut);
 
     expect(addAccountSpy.callsCount).toBe(0);
+  });
+
+  test('Should present error and hide spinner if Authentication fails', async () => {
+    const { sut, addAccountSpy } = makeSut();
+    const error = new EmailInUseError();
+
+    jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(error);
+    await simulateValidSubmit(sut);
+
+    Helper.testChildCount(sut, 'error-wrapper', 1);
+    testElementText(sut, 'request-error', error.message);
   });
 });
