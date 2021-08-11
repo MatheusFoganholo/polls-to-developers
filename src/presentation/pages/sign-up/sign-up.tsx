@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Context from '@/presentation/contexts/form/form-context';
 import {
@@ -7,17 +7,30 @@ import {
   Input,
   LoginHeader
 } from '@/presentation/components';
+import { Validation } from '@/presentation/protocols/validation';
 import Styles from './sign-up-styles.scss';
 
-export const SignUp: React.FC = () => {
+type Props = {
+  validation: Validation;
+};
+
+export const SignUp: React.FC<Props> = ({ validation }: Props) => {
   const [state, setState] = useState({
     isLoading: false,
-    nameError: 'Required field.',
+    name: '',
+    nameError: '',
     emailError: 'Required field.',
     passwordError: 'Required field.',
     passwordConfirmationError: 'Required field.',
     requestError: ''
   });
+
+  useEffect(() => {
+    setState({
+      ...state,
+      nameError: validation.validate('name', state.name)
+    });
+  }, [state.name]);
 
   return (
     <div className={Styles.signUp}>
