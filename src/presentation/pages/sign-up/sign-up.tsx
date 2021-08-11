@@ -59,7 +59,16 @@ export const SignUp: React.FC<Props> = ({ validation }: Props) => {
             name="passwordConfirmation"
             placeholder="Confirm your password"
           />
-          <button type="submit" data-testid="submit-button" disabled>
+          <button
+            type="submit"
+            data-testid="submit-button"
+            disabled={
+              !!state.nameError ||
+              !!state.emailError ||
+              !!state.passwordError ||
+              !!state.passwordConfirmationError
+            }
+          >
             Create
           </button>
           <span className={Styles.link}>
