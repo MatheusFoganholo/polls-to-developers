@@ -1,35 +1,67 @@
 import React from 'react';
+import {
+  cleanup,
+  fireEvent,
+  render,
+  RenderResult
+} from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { render, RenderResult } from '@testing-library/react';
+import { random } from 'faker';
 import { Router } from 'react-router-dom';
-import { Helper } from '@/presentation/test';
+import { Helper, ValidationStub } from '@/presentation/test';
 import { SignUp } from './sign-up';
 
 type SutTypes = {
   sut: RenderResult;
 };
 
+type SutParams = {
+  validationError: string;
+};
+
 const history = createMemoryHistory({ initialEntries: ['/login'] });
 
-const makeSut = (): SutTypes => {
+const makeSut = (params?: SutParams): SutTypes => {
+  const validationStub = new ValidationStub();
+  validationStub.errorMessage = params?.validationError;
   const sut = render(
     <Router history={history}>
-      <SignUp />
+      <SignUp validation={validationStub} />
     </Router>
   );
   return { sut };
 };
 
+const populateField = (
+  { getByTestId }: RenderResult,
+  fieldName: string,
+  value = random.word()
+): void => {
+  const input = getByTestId(`${fieldName}-input`);
+  fireEvent.input(input, { target: { value } });
+};
+
 describe('SignUp Component', () => {
+  afterEach(cleanup);
+
   test('Should initialize with initial state', () => {
-    const validationError = 'Required field.';
-    const { sut } = makeSut();
+    const validationError = random.words();
+    const { sut } = makeSut({ validationError });
 
     Helper.testStatusForField(sut, 'name', validationError);
-    Helper.testStatusForField(sut, 'email', validationError);
-    Helper.testStatusForField(sut, 'password', validationError);
-    Helper.testStatusForField(sut, 'passwordConfirmation', validationError);
+    Helper.testStatusForField(sut, 'email', 'Required field.');
+    Helper.testStatusForField(sut, 'password', 'Required field.');
+    Helper.testStatusForField(sut, 'passwordConfirmation', 'Required field.');
     Helper.testChildCount(sut, 'error-wrapper', 0);
     Helper.testButtonIsDisabled(sut, 'submit-button', true);
+  });
+
+  test('Should show name error if Validation fails', () => {
+    const validationError = random.words();
+    const { sut } = makeSut({ validationError });
+
+    populateField(sut, 'name');
+
+    Helper.testStatusForField(sut, 'name', validationError);
   });
 });
