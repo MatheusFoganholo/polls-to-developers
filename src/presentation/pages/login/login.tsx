@@ -86,7 +86,7 @@ export const Login: React.FC<Props> = ({
           </button>
           <span className={Styles.link}>
             Don't have an account? Click{' '}
-            <Link to="/sign-up" data-testid="sign-up">
+            <Link to="/sign-up" data-testid="sign-up-link">
               here
             </Link>{' '}
             to register.
