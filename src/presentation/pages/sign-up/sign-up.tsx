@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { AddAccount } from '@/domain/usecases';
 import Context from '@/presentation/contexts/form/form-context';
 import {
   Footer,
@@ -12,9 +13,10 @@ import Styles from './sign-up-styles.scss';
 
 type Props = {
   validation: Validation;
+  addAccount: AddAccount;
 };
 
-export const SignUp: React.FC<Props> = ({ validation }: Props) => {
+export const SignUp: React.FC<Props> = ({ validation, addAccount }: Props) => {
   const [state, setState] = useState({
     isLoading: false,
     name: '',
@@ -33,6 +35,12 @@ export const SignUp: React.FC<Props> = ({ validation }: Props) => {
   ): Promise<void> => {
     event.preventDefault();
     setState({ ...state, isLoading: true });
+    await addAccount.add({
+      name: state.name,
+      email: state.email,
+      password: state.password,
+      passwordConfirmation: state.passwordConfirmation
+    });
   };
 
   useEffect(() => {
