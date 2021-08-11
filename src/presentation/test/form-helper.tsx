@@ -1,4 +1,14 @@
-import { RenderResult } from '@testing-library/react';
+import { fireEvent, RenderResult } from '@testing-library/react';
+import { random } from 'faker';
+
+export const populateField = (
+  { getByTestId }: RenderResult,
+  fieldName: string,
+  value = random.word()
+): void => {
+  const input = getByTestId(`${fieldName}-input`);
+  fireEvent.input(input, { target: { value } });
+};
 
 export const testButtonIsDisabled = (
   sut: RenderResult,

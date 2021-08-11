@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  cleanup,
-  fireEvent,
-  render,
-  RenderResult
-} from '@testing-library/react';
+import { cleanup, render, RenderResult } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { random } from 'faker';
 import { Router } from 'react-router-dom';
@@ -32,15 +27,6 @@ const makeSut = (params?: SutParams): SutTypes => {
   return { sut };
 };
 
-const populateField = (
-  { getByTestId }: RenderResult,
-  fieldName: string,
-  value = random.word()
-): void => {
-  const input = getByTestId(`${fieldName}-input`);
-  fireEvent.input(input, { target: { value } });
-};
-
 describe('SignUp Component', () => {
   afterEach(cleanup);
 
@@ -60,7 +46,7 @@ describe('SignUp Component', () => {
     const validationError = random.words();
     const { sut } = makeSut({ validationError });
 
-    populateField(sut, 'name');
+    Helper.populateField(sut, 'name');
 
     Helper.testStatusForField(sut, 'name', validationError);
   });
