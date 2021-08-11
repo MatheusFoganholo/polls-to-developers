@@ -47,10 +47,6 @@ const makeSut = (params?: SutParams): SutTypes => {
   return { sut, authenticationSpy, saveAccessTokenMock };
 };
 
-const testElementExistence = (sut: RenderResult, fieldName: string): void => {
-  expect(sut.getByTestId(fieldName)).toBeTruthy();
-};
-
 const testElementText = (
   sut: RenderResult,
   fieldName: string,
@@ -133,7 +129,7 @@ describe('Login Component', () => {
 
     await simulateValidSubmit(sut);
 
-    testElementExistence(sut, 'spinner');
+    Helper.testElementExistence(sut, 'spinner');
   });
 
   test('Should call Authentication with correct values', async () => {

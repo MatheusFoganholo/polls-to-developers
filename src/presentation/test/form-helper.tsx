@@ -28,6 +28,13 @@ export const testChildCount = (
   expect(el.childElementCount).toBe(count);
 };
 
+export const testElementExistence = (
+  sut: RenderResult,
+  fieldName: string
+): void => {
+  expect(sut.getByTestId(fieldName)).toBeTruthy();
+};
+
 export const testStatusForField = (
   sut: RenderResult,
   fieldName: string,
