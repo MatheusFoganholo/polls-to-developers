@@ -114,7 +114,9 @@ export const SignUp: React.FC<Props> = ({
             Create
           </button>
           <span className={Styles.link}>
-            <Link to="/login">Back to Login</Link>
+            <Link to="/login" replace data-testid="login-link">
+              Back to Login
+            </Link>
           </span>
           <FormStatus />
         </form>
