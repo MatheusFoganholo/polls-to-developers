@@ -35,6 +35,14 @@ export const testElementExistence = (
   expect(sut.getByTestId(fieldName)).toBeTruthy();
 };
 
+export const testElementText = (
+  sut: RenderResult,
+  fieldName: string,
+  text: string
+): void => {
+  expect(sut.getByTestId(fieldName).textContent).toBe(text);
+};
+
 export const testStatusForField = (
   sut: RenderResult,
   fieldName: string,

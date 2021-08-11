@@ -47,14 +47,6 @@ const makeSut = (params?: SutParams): SutTypes => {
   return { sut, authenticationSpy, saveAccessTokenMock };
 };
 
-const testElementText = (
-  sut: RenderResult,
-  fieldName: string,
-  text: string
-): void => {
-  expect(sut.getByTestId(fieldName).textContent).toBe(text);
-};
-
 const simulateValidSubmit = async (
   sut: RenderResult,
   email = internet.email(),
@@ -168,7 +160,7 @@ describe('Login Component', () => {
     await simulateValidSubmit(sut);
 
     Helper.testChildCount(sut, 'error-wrapper', 1);
-    testElementText(sut, 'request-error', error.message);
+    Helper.testElementText(sut, 'request-error', error.message);
   });
 
   test('Should call SaveAccessToken on Authentication success', async () => {
@@ -193,7 +185,7 @@ describe('Login Component', () => {
     await simulateValidSubmit(sut);
 
     Helper.testChildCount(sut, 'error-wrapper', 1);
-    testElementText(sut, 'request-error', error.message);
+    Helper.testElementText(sut, 'request-error', error.message);
   });
 
   test('Should go to sign-up page', () => {
