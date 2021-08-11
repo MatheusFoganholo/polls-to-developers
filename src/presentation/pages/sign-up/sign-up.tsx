@@ -28,6 +28,13 @@ export const SignUp: React.FC<Props> = ({ validation }: Props) => {
     requestError: ''
   });
 
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    event.preventDefault();
+    setState({ ...state, isLoading: true });
+  };
+
   useEffect(() => {
     setState({
       ...state,
@@ -45,7 +52,11 @@ export const SignUp: React.FC<Props> = ({ validation }: Props) => {
     <div className={Styles.signUp}>
       <LoginHeader />
       <Context.Provider value={{ state, setState }}>
-        <form className={Styles.form}>
+        <form
+          className={Styles.form}
+          onSubmit={handleSubmit}
+          data-testid="form"
+        >
           <h2>Create your account</h2>
           <Input type="text" name="name" placeholder="Type your name" />
           <Input type="email" name="email" placeholder="Type your e-mail" />
