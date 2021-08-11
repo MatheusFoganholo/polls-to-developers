@@ -232,4 +232,14 @@ describe('SignUp Component', () => {
     Helper.testChildCount(sut, 'error-wrapper', 1);
     Helper.testElementText(sut, 'request-error', error.message);
   });
+
+  test('Should go to login page', () => {
+    const { sut } = makeSut();
+    const loginLink = sut.getByTestId('login-link');
+
+    fireEvent.click(loginLink);
+
+    expect(history.length).toBe(1);
+    expect(history.location.pathname).toBe('/login');
+  });
 });
