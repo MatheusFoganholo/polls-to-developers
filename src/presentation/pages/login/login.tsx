@@ -6,7 +6,8 @@ import {
   Footer,
   FormStatus,
   Input,
-  LoginHeader
+  LoginHeader,
+  SubmitButton
 } from '@/presentation/components';
 import { Validation } from '@/presentation/protocols/validation';
 import Styles from './login-styles.scss';
@@ -25,6 +26,7 @@ export const Login: React.FC<Props> = ({
   const history = useHistory();
   const [state, setState] = useState({
     isLoading: false,
+    isFormInvalid: true,
     email: '',
     password: '',
     emailError: '',
@@ -37,7 +39,7 @@ export const Login: React.FC<Props> = ({
   ): Promise<void> => {
     event.preventDefault();
     try {
-      if (state.isLoading || state.emailError || state.passwordError) return;
+      if (state.isLoading || state.isFormInvalid) return;
 
       setState({ ...state, isLoading: true });
 
@@ -54,10 +56,14 @@ export const Login: React.FC<Props> = ({
   };
 
   useEffect(() => {
+    const emailError = validation.validate('email', state.email);
+    const passwordError = validation.validate('password', state.password);
+
     setState({
       ...state,
-      emailError: validation.validate('email', state.email),
-      passwordError: validation.validate('password', state.password)
+      emailError,
+      passwordError,
+      isFormInvalid: !!emailError || !!passwordError
     });
   }, [state.email, state.password]);
 
@@ -77,13 +83,7 @@ export const Login: React.FC<Props> = ({
             name="password"
             placeholder="Type your password"
           />
-          <button
-            type="submit"
-            data-testid="submit-button"
-            disabled={!!state.emailError || !!state.passwordError}
-          >
-            Login
-          </button>
+          <SubmitButton text="Login" />
           <span className={Styles.link}>
             Don't have an account? Click{' '}
             <Link to="/sign-up" data-testid="sign-up-link">
