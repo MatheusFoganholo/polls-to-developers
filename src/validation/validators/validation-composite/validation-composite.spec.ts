@@ -26,7 +26,7 @@ describe('ValidationComposite', () => {
     fieldValidationsSpy[0].error = new Error(errorMessage);
     fieldValidationsSpy[1].error = new Error(random.words());
 
-    const error = sut.validate(fieldName, random.word());
+    const error = sut.validate(fieldName, { [fieldName]: random.word() });
 
     expect(error).toBe(errorMessage);
   });
@@ -35,7 +35,7 @@ describe('ValidationComposite', () => {
     const fieldName = database.column();
     const { sut } = makeSut(fieldName);
 
-    const error = sut.validate(fieldName, random.word());
+    const error = sut.validate(fieldName, { [fieldName]: random.word() });
 
     expect(error).toBeFalsy();
   });
